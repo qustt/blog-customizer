@@ -6,9 +6,19 @@ import { Text } from 'components/text';
 
 import styles from './Article.module.scss';
 
-export const Article = () => {
+type TArticleProps = {
+	state: boolean;
+	setState: Function;
+};
+
+export const Article = (props: TArticleProps) => {
+
+	function changeState(){
+		props.setState(false)
+	}
+
 	return (
-		<article className={clsx(styles.article)}>
+		<article className={clsx(styles.article)} onClick={changeState}>
 			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>
