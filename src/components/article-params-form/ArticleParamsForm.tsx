@@ -1,10 +1,10 @@
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
-import { useState, useEffect } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import styles from './ArticleParamsForm.module.scss';
 import { Select } from '../select';
 import { Separator } from '../separator';
-import { fontFamilyOptions, fontColors, backgroundColors, contentWidthArr, fontSizeOptions, OptionType } from 'src/constants/articleProps';
+import { fontFamilyOptions, fontColors, backgroundColors, contentWidthArr, fontSizeOptions, OptionType, defaultArticleState, ArticleStateType } from 'src/constants/articleProps';
 import { RadioGroup } from '../radio-group';
 
 
@@ -24,10 +24,12 @@ type TArticleParamsFormProps = {
 	setBackgroundColor: Function;
 	containerSize: OptionType;
 	setContainerSize: Function;
-
+	resetText: Function;
+	updateText: Function;
 }
 
 export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
+
 
 	const onChangeFont = (item: OptionType) => {
 		props.setFont(item);
@@ -53,6 +55,17 @@ export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
 
 	}
 
+	const resetForm = (e: FormEvent) => {
+		e.preventDefault();
+		props.resetText();
+	}
+
+
+	const submitForm = (e:FormEvent) => {
+		e.preventDefault();
+		props.updateText();
+	}
+
 	return (
 		<>
 			<ArrowButton state={props.state} setState={props.setState} />
@@ -60,7 +73,7 @@ export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
 				className={`${styles.container} ${
 					props.state ? styles.container_open : ''
 				}`}>
-				<form className={styles.form}>
+				<form className={styles.form} onSubmit={submitForm} onReset={resetForm}>
 					<h2 className={styles.title}>Задайте параметры</h2>
 					<Select selected={props.font} options={fontFamilyOptions} title='Шрифт' onChange={onChangeFont}/>
 					<RadioGroup name='Размер' options={fontSizeOptions} selected={props.size} title='Размер' onChange={onChangeSize} />

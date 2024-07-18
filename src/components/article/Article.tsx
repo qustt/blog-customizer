@@ -13,6 +13,8 @@ type TArticleProps = {
 
 export const Article = (props: TArticleProps) => {
 
+
+	//По клику на статью закрываем форму
 	function changeState(){
 		props.setState(false)
 	}
