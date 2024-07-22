@@ -2,6 +2,7 @@ import arrow from 'src/images/arrow.svg';
 
 import styles from './ArrowButton.module.scss';
 import { MouseEventHandler } from 'react';
+import clsx from 'clsx';
 
 type TArrowButtonProps = {
 	state: boolean,
@@ -13,36 +14,30 @@ export type OnClick = () => void;
 
 export const ArrowButton = (props: TArrowButtonProps) => {
 
+	const divStyle = clsx({
+		[styles.container] : true,
+		[styles.container_open] : props.state
+	})
+
+	const imgStyle = clsx({
+		[styles.arrow] : true,
+		[styles.arrow_open] : props.state
+	})
+
 	function clickHandler() {
 		props.setState((prevState: boolean) => !prevState )
 	}
 
-	if (props.state){
 		return (
 			/* Не забываем указаывать role и aria-label атрибуты для интерактивных элементов */
 			<div
 				role='button'
 				aria-label='Открыть/Закрыть форму параметров статьи'
 				tabIndex={0}
-				className={`${styles.container} ${styles.container_open}`}
+				className={divStyle}
 				onClick={clickHandler}
 				>
-				<img src={arrow} alt='иконка стрелочки' className={`${styles.arrow} ${styles.arrow_open}`}  />
+				<img src={arrow} alt='иконка стрелочки' className={imgStyle}  />
 			</div>
 		);
-	}
-	else {
-		return (
-			/* Не забываем указаывать role и aria-label атрибуты для интерактивных элементов */
-			<div
-				role='button'
-				aria-label='Открыть/Закрыть форму параметров статьи'
-				tabIndex={0}
-				className={styles.container}
-				onClick={clickHandler}>
-				<img src={arrow} alt='иконка стрелочки' className={styles.arrow}  />
-			</div>
-		);
-	}
-
 };

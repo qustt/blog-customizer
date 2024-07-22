@@ -16,43 +16,8 @@ const root = createRoot(domNode);
 
 const App = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [font, setFont] = useState(defaultArticleState.fontFamilyOption);
-	const [size, setSize] = useState(defaultArticleState.fontSizeOption);
-	const [fontColor, setFontColor] = useState(defaultArticleState.fontColor);
-	const [backgroundColor, setBackgroundColor] = useState(defaultArticleState.backgroundColor);
-	const [containerSize, setContainerSize] = useState(defaultArticleState.contentWidth);
 
 	const ref = useRef(defaultArticleState);
-
-	const updateText = () => {
-		ref.current = {
-		  fontFamilyOption: font,
-		  fontSizeOption: size,
-		  fontColor: fontColor,
-		  backgroundColor: backgroundColor,
-		  contentWidth: containerSize,
-		};
-
-		setIsOpen(!isOpen);
-	  };
-
-	  const resetText = () => {
-		setFont(defaultArticleState.fontFamilyOption);
-		setSize(defaultArticleState.fontSizeOption);
-		setFontColor(defaultArticleState.fontColor);
-		setBackgroundColor(defaultArticleState.backgroundColor);
-		setContainerSize(defaultArticleState.contentWidth);
-
-		ref.current = {
-			fontFamilyOption: defaultArticleState.fontFamilyOption,
-			fontSizeOption: defaultArticleState.fontSizeOption,
-			fontColor: defaultArticleState.fontColor,
-			backgroundColor: defaultArticleState.backgroundColor,
-			contentWidth: defaultArticleState.contentWidth,
-		  };
-	  };
-
-
 
 	return (
 		<div
@@ -70,18 +35,7 @@ const App = () => {
 			<ArticleParamsForm
 			state = {isOpen}
 			setState={setIsOpen}
-			font={font}
-			setFont={setFont}
-			backgroundColor={backgroundColor}
-			setBackgroundColor={setBackgroundColor}
-			fontColor={fontColor}
-			setFontColor={setFontColor}
-			size={size}
-			setSize={setSize}
-			containerSize={containerSize}
-			setContainerSize={setContainerSize}
-			resetText={resetText}
-			updateText={updateText}
+			articleSettings={ref}
 			/>
 
 			<Article state = {isOpen} setState={setIsOpen}/>
