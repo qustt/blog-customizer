@@ -4,9 +4,8 @@ import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
-import { defaultArticleState } from './constants/articleProps';
-import { fontFamilyOptions, fontColors, backgroundColors, contentWidthArr, fontSizeOptions, OptionType } from 'src/constants/articleProps';
-import { useState, useRef, useEffect } from 'react';
+import { defaultArticleState} from './constants/articleProps';
+import { useState} from 'react';
 
 import './styles/index.scss';
 import styles from './styles/index.module.scss';
@@ -17,25 +16,31 @@ const root = createRoot(domNode);
 const App = () => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const ref = useRef(defaultArticleState);
+	const [article, setArticle] = useState({
+		fontFamilyOption: defaultArticleState.fontFamilyOption,
+    	fontColor: defaultArticleState.fontColor,
+    	backgroundColor: defaultArticleState.backgroundColor,
+    	contentWidth: defaultArticleState.contentWidth,
+    	fontSizeOption: defaultArticleState.fontSizeOption
+	})
 
 	return (
 		<div
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': ref.current.fontFamilyOption.value,
-					'--font-size': ref.current.fontSizeOption.value,
-					'--font-color': ref.current.fontColor.value,
-					'--container-width': ref.current.contentWidth.value,
-					'--bg-color': ref.current.backgroundColor.value,
+					'--font-family': article.fontFamilyOption.value,
+					'--font-size': article.fontSizeOption.value,
+					'--font-color': article.fontColor.value,
+					'--container-width': article.contentWidth.value,
+					'--bg-color': article.backgroundColor.value,
 				} as CSSProperties
 			}
 			>
 			<ArticleParamsForm
 			state = {isOpen}
 			setState={setIsOpen}
-			articleSettings={ref}
+			articleSettings={setArticle}
 			/>
 
 			<Article state = {isOpen} setState={setIsOpen}/>

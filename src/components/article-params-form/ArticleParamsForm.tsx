@@ -1,10 +1,10 @@
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
-import { useState, useRef, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import styles from './ArticleParamsForm.module.scss';
 import { Select } from '../select';
 import { Separator } from '../separator';
-import { fontFamilyOptions, fontColors, backgroundColors, contentWidthArr, fontSizeOptions, OptionType, defaultArticleState, ArticleStateType } from 'src/constants/articleProps';
+import { fontFamilyOptions, fontColors, backgroundColors, contentWidthArr, fontSizeOptions, OptionType, defaultArticleState } from 'src/constants/articleProps';
 import { RadioGroup } from '../radio-group';
 import clsx from 'clsx';
 
@@ -15,13 +15,7 @@ import clsx from 'clsx';
 type TArticleParamsFormProps = {
 	state: boolean;
 	setState: Function;
-	articleSettings: React.MutableRefObject<{
-		fontFamilyOption: OptionType;
-		fontColor: OptionType;
-		backgroundColor: OptionType;
-		contentWidth: OptionType;
-		fontSizeOption: OptionType;
-	}>
+	articleSettings: Function;
 }
 
 export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
@@ -74,13 +68,14 @@ export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
 	}
 
 	const updateText = () => {
-		props.articleSettings.current = {
-		  fontFamilyOption: font,
-		  fontSizeOption: size,
-		  fontColor: fontColor,
-		  backgroundColor: backgroundColor,
-		  contentWidth: containerSize,
-		};
+
+		props.articleSettings({
+			fontFamilyOption: font,
+			fontSizeOption: size,
+			fontColor: fontColor,
+			backgroundColor: backgroundColor,
+			contentWidth: containerSize,
+		})
 
 		props.setState(!props.state);
 	  };
@@ -93,13 +88,14 @@ export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
 		setBackgroundColor(defaultArticleState.backgroundColor);
 		setContainerSize(defaultArticleState.contentWidth);
 
-		props.articleSettings.current = {
+		props.articleSettings({
 			fontFamilyOption: defaultArticleState.fontFamilyOption,
 			fontSizeOption: defaultArticleState.fontSizeOption,
 			fontColor: defaultArticleState.fontColor,
 			backgroundColor: defaultArticleState.backgroundColor,
 			contentWidth: defaultArticleState.contentWidth,
-		  };
+		})
+
 		props.setState(!props.state);
 	  };
 
