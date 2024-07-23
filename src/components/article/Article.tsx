@@ -6,17 +6,13 @@ import { Text } from 'components/text';
 
 import styles from './Article.module.scss';
 
-type TArticleProps = {
-	state: boolean;
-	setState: Function;
-};
 
-export const Article = (props: TArticleProps) => {
+export const Article = () => {
 
 
 	//По клику на статью закрываем форму
 	function changeState(){
-		props.setState(false)
+
 	}
 
 	return (

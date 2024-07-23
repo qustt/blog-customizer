@@ -1,6 +1,6 @@
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useRef, useEffect } from 'react';
 import styles from './ArticleParamsForm.module.scss';
 import { Select } from '../select';
 import { Separator } from '../separator';
@@ -13,97 +13,110 @@ import clsx from 'clsx';
 
 
 type TArticleParamsFormProps = {
-	state: boolean;
-	setState: Function;
 	articleSettings: Function;
-}
+  };
 
-export const ArticleParamsForm = (props:TArticleParamsFormProps) => {
-
-
+  export const ArticleParamsForm = (props: TArticleParamsFormProps) => {
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [font, setFont] = useState(defaultArticleState.fontFamilyOption);
 	const [size, setSize] = useState(defaultArticleState.fontSizeOption);
 	const [fontColor, setFontColor] = useState(defaultArticleState.fontColor);
 	const [backgroundColor, setBackgroundColor] = useState(defaultArticleState.backgroundColor);
 	const [containerSize, setContainerSize] = useState(defaultArticleState.contentWidth);
 
-	const formStyle =clsx({
-		[styles.container] : true,
-		[styles.container_open] : props.state
-	})
+	const formRef = useRef<HTMLDivElement>(null);
+
+	const formStyle = clsx({
+	  [styles.container]: true,
+	  [styles.container_open]: isOpen,
+	});
 
 	const onChangeFont = (item: OptionType) => {
-		setFont(item);
-	}
+	  setFont(item);
+	};
 
-	const onChangeSize = (item: OptionType)=>{
-		setSize(item);
+	const onChangeSize = (item: OptionType) => {
+	  setSize(item);
+	};
 
-	}
+	const onChangeFontColor = (item: OptionType) => {
+	  setFontColor(item);
+	};
 
-	const onChangeFontColor = (item: OptionType)=>{
-		setFontColor(item);
+	const onChangeBackgroundColor = (item: OptionType) => {
+	  setBackgroundColor(item);
+	};
 
-	}
+	const onChangeContainerSize = (item: OptionType) => {
+	  setContainerSize(item);
+	};
 
-	const onChangeBackgroundColor = (item: OptionType)=>{
-		setBackgroundColor(item);
 
-	}
+	const handleClickOutside = (event: MouseEvent) => {
+		if (formRef.current && !formRef.current.contains(event.target as Node)) {
+		  setIsOpen(false);
+		}
+	  };
 
-	const onChangeContainerSize = (item: OptionType)=>{
-		setContainerSize(item);
-
-	}
 
 	const resetForm = (e: FormEvent) => {
-		e.preventDefault();
-		resetText();
-	}
+	  e.preventDefault();
+	  resetText();
+	};
 
-
-	const submitForm = (e:FormEvent) => {
-		e.preventDefault();
-		updateText();
-	}
+	const submitForm = (e: FormEvent) => {
+	  e.preventDefault();
+	  updateText();
+	};
 
 	const updateText = () => {
+	  props.articleSettings({
+		fontFamilyOption: font,
+		fontSizeOption: size,
+		fontColor: fontColor,
+		backgroundColor: backgroundColor,
+		contentWidth: containerSize,
+	  });
 
-		props.articleSettings({
-			fontFamilyOption: font,
-			fontSizeOption: size,
-			fontColor: fontColor,
-			backgroundColor: backgroundColor,
-			contentWidth: containerSize,
-		})
+	  setIsOpen(false);
+	};
 
-		props.setState(!props.state);
-	  };
+	const resetText = () => {
+	  setFont(defaultArticleState.fontFamilyOption);
+	  setSize(defaultArticleState.fontSizeOption);
+	  setFontColor(defaultArticleState.fontColor);
+	  setBackgroundColor(defaultArticleState.backgroundColor);
+	  setContainerSize(defaultArticleState.contentWidth);
 
+	  props.articleSettings({
+		fontFamilyOption: defaultArticleState.fontFamilyOption,
+		fontSizeOption: defaultArticleState.fontSizeOption,
+		fontColor: defaultArticleState.fontColor,
+		backgroundColor: defaultArticleState.backgroundColor,
+		contentWidth: defaultArticleState.contentWidth,
+	  });
 
-	  const resetText = () => {
-		setFont(defaultArticleState.fontFamilyOption);
-		setSize(defaultArticleState.fontSizeOption);
-		setFontColor(defaultArticleState.fontColor);
-		setBackgroundColor(defaultArticleState.backgroundColor);
-		setContainerSize(defaultArticleState.contentWidth);
+	  setIsOpen(false);
+	};
 
-		props.articleSettings({
-			fontFamilyOption: defaultArticleState.fontFamilyOption,
-			fontSizeOption: defaultArticleState.fontSizeOption,
-			fontColor: defaultArticleState.fontColor,
-			backgroundColor: defaultArticleState.backgroundColor,
-			contentWidth: defaultArticleState.contentWidth,
-		})
-
-		props.setState(!props.state);
-	  };
+	useEffect(() => {
+		if (isOpen) {
+		  document.addEventListener('mousedown', handleClickOutside);
+		} else {
+		  document.removeEventListener('mousedown', handleClickOutside);
+		}
+		return () => {
+		  document.removeEventListener('mousedown', handleClickOutside);
+		};
+	  }, [isOpen]);
 
 	return (
 		<>
-			<ArrowButton state={props.state} setState={props.setState} />
+			<ArrowButton formState={isOpen} setFormState={setIsOpen} />
 			<aside
-				className={formStyle}>
+				className={formStyle}
+				ref={formRef}
+				>
 				<form className={styles.form} onSubmit={submitForm} onReset={resetForm}>
 					<h2 className={styles.title}>Задайте параметры</h2>
 					<Select selected={font} options={fontFamilyOptions} title='Шрифт' onChange={onChangeFont}/>

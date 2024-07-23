@@ -14,15 +14,8 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const [article, setArticle] = useState({
-		fontFamilyOption: defaultArticleState.fontFamilyOption,
-    	fontColor: defaultArticleState.fontColor,
-    	backgroundColor: defaultArticleState.backgroundColor,
-    	contentWidth: defaultArticleState.contentWidth,
-    	fontSizeOption: defaultArticleState.fontSizeOption
-	})
+	const [article, setArticle] = useState(defaultArticleState);
 
 	return (
 		<div
@@ -38,12 +31,10 @@ const App = () => {
 			}
 			>
 			<ArticleParamsForm
-			state = {isOpen}
-			setState={setIsOpen}
 			articleSettings={setArticle}
 			/>
 
-			<Article state = {isOpen} setState={setIsOpen}/>
+			<Article />
 		</div>
 	);
 };

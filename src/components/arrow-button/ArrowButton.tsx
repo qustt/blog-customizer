@@ -4,27 +4,25 @@ import styles from './ArrowButton.module.scss';
 import clsx from 'clsx';
 
 type TArrowButtonProps = {
-	state: boolean,
-	setState: Function
+	formState: boolean,
+	setFormState: Function
 }
 
-/** Функция для обработки открытия/закрытия формы */
-export type OnClick = () => void;
 
 export const ArrowButton = (props: TArrowButtonProps) => {
 
 	const divStyle = clsx({
 		[styles.container] : true,
-		[styles.container_open] : props.state
+		[styles.container_open] : props.formState
 	})
 
 	const imgStyle = clsx({
 		[styles.arrow] : true,
-		[styles.arrow_open] : props.state
+		[styles.arrow_open] : props.formState
 	})
 
 	function clickHandler() {
-		props.setState((prevState: boolean) => !prevState )
+		props.setFormState((prevState: boolean) => !prevState )
 	}
 
 		return (
